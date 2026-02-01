@@ -561,8 +561,8 @@ def build_sam3_image_model(
     bpe_path=None,
     device="cuda" if torch.cuda.is_available() else "cpu",
     eval_mode=True,
-    checkpoint_path=None,
-    load_from_HF=True,
+    checkpoint_path=r"D:\ProgramFiles\SAM\SAM3\checkpoint\sam3.pt",
+    load_from_HF=False,
     enable_segmentation=True,
     enable_inst_interactivity=False,
     compile=False,
@@ -629,8 +629,8 @@ def build_sam3_image_model(
         inst_predictor,
         eval_mode,
     )
-    if load_from_HF and checkpoint_path is None:
-        checkpoint_path = download_ckpt_from_hf()
+    if checkpoint_path is None:
+        checkpoint_path = checkpoint_path
     # Load checkpoint if provided
     if checkpoint_path is not None:
         _load_checkpoint(model, checkpoint_path)
@@ -641,7 +641,7 @@ def build_sam3_image_model(
     return model
 
 
-def download_ckpt_from_hf():
+#def download_ckpt_from_hf():
     SAM3_MODEL_ID = "facebook/sam3"
     SAM3_CKPT_NAME = "sam3.pt"
     SAM3_CFG_NAME = "config.json"
@@ -651,7 +651,7 @@ def download_ckpt_from_hf():
 
 
 def build_sam3_video_model(
-    checkpoint_path: Optional[str] = None,
+    checkpoint_path: Optional[str] = r"D:\ProgramFiles\SAM\SAM3\checkpoint\sam3.pt",
     load_from_HF=True,
     bpe_path: Optional[str] = None,
     has_presence_token: bool = True,
@@ -772,7 +772,7 @@ def build_sam3_video_model(
 
     # Load checkpoint if provided
     if load_from_HF and checkpoint_path is None:
-        checkpoint_path = download_ckpt_from_hf()
+        checkpoint_path = checkpoint_path
     if checkpoint_path is not None:
         with g_pathmgr.open(checkpoint_path, "rb") as f:
             ckpt = torch.load(f, map_location="cpu", weights_only=True)
